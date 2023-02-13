@@ -12,17 +12,20 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(of = "id")
 public class Coupon {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Enumerated(EnumType.ORDINAL)
     private int companyId;
+
     @Enumerated(EnumType.ORDINAL)
     private Category category;
     private String title;
     private String description;
+
     @Column(nullable = false)
     private LocalDate startDate;
+
     @Column(nullable = false)
     private LocalDate endDate;
     private int amount;
@@ -30,10 +33,11 @@ public class Coupon {
     private String image;
 
     @ManyToMany(mappedBy = "coupons",cascade = CascadeType.DETACH)
+    @ToString.Exclude
     private List<Customer> customers;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "companyId")
     @ToString.Exclude
     private Company company;
 
