@@ -17,17 +17,19 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column
     private String name;
+
     @Column(unique = true)
     private String email;
     private String password;
 
-    @OneToMany
+    @OneToMany(mappedBy = "company",cascade =CascadeType.ALL )
     private List<Coupon> coupons;
 
     // TODO: 09/02/2023
-    public void addCoupon(Coupon coupon) {
-
-    }
+//    public void addCoupon(Coupon coupon) {
+//
+//    }
 }
