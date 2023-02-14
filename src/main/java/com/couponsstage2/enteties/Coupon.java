@@ -16,7 +16,7 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int companyId;
+//    private int companyId;
 
     @Enumerated(EnumType.ORDINAL)
     private Category category;
