@@ -28,8 +28,8 @@ public class Company {
     @OneToMany(mappedBy = "company",cascade =CascadeType.ALL )
     private List<Coupon> coupons;
 
-    // TODO: 09/02/2023
-//    public void addCoupon(Coupon coupon) {
-//
-//    }
+    public void addCoupon(Coupon coupon) {
+        coupons.add(coupon);
+        System.out.println("coupon " + coupon.getDescription()+ " was added");
+    }
 }

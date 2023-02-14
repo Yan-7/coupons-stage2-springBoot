@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface CompaniesRep extends JpaRepository<Company,Integer> {
 
+    Optional<Company> findByEmailAndPassword(String email, String password);
     @Override
     Optional<Company> findById(Integer integer);
 
