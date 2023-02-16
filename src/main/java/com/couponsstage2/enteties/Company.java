@@ -4,6 +4,7 @@ package com.couponsstage2.enteties;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +30,11 @@ public class Company {
     private List<Coupon> coupons;
 
     public void addCoupon(Coupon coupon) {
+        if (coupons == null) {
+            coupons = new ArrayList<>();
+        }
+        coupon.setCompany(this);
         coupons.add(coupon);
-        System.out.println("coupon " + coupon.getDescription()+ " was added");
+
     }
 }

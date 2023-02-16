@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface CouponsRep extends JpaRepository<Coupon,Integer> {
 
+
+
     @Override
     default Coupon getOne(Integer integer) {
         return null;
