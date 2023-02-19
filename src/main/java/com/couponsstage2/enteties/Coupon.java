@@ -32,8 +32,14 @@ public class Coupon {
     private double price;
     private String image;
 
-    @ManyToMany(mappedBy = "coupons",cascade = CascadeType.DETACH)
+    @ManyToMany
+    @JoinTable(
+            name = "customer_vs_coupon",
+            joinColumns = @JoinColumn(name="coupon_id"),
+            inverseJoinColumns = @JoinColumn(name="customer_id")
+    )
     @ToString.Exclude
+    @Setter(value = AccessLevel.NONE)
     private List<Customer> customers;
 
     @ManyToOne

@@ -2,6 +2,7 @@ package com.couponsstage2.services;
 
 import com.couponsstage2.enteties.Company;
 import com.couponsstage2.enteties.Customer;
+import com.couponsstage2.exceptions.CouponsExceptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,15 @@ public class AdminService extends ClientService {
             return false;
         }
     }
-    public void addCompany(Company company){
-        companiesRep.save(company);
-        System.out.println("company " + company.getName() + " saved");
+
+    // TODO: 19/02/2023 add exceptions 
+    public void addCompany(Company company)  {
+        if (this.companiesRep.findByEmailAndPassword(company.getEmail(), company.getPassword()).isPresent()) {
+            System.out.println("company is already in the data base");
+            } else {
+            companiesRep.save(company);
+            System.out.println("company saved");
+        }
     }
 
     public void updateCompany(Company company){

@@ -30,11 +30,11 @@ public class Company {
     private List<Coupon> coupons;
 
     public void addCoupon(Coupon coupon) {
-        if (coupons == null) {
-            coupons = new ArrayList<>();
+        if (this.coupons == null) {
+            this.coupons = new ArrayList<>();
         }
         coupon.setCompany(this);
-        coupons.add(coupon);
+        this.coupons.add(coupon);
 
     }
 }
