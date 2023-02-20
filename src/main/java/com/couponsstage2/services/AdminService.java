@@ -18,7 +18,7 @@ public class AdminService extends ClientService {
 
     @Override
     public boolean login(String email, String password) {
-        if (email == emailA && password ==passwordA) {
+        if (email == emailA && password == passwordA) {
             System.out.println("user admin returned true");
             return true;
         } else {
@@ -29,44 +29,88 @@ public class AdminService extends ClientService {
     }
 
     // TODO: 19/02/2023 add exceptions 
-    public void addCompany(Company company)  {
+    public void addCompany(Company company) throws CouponsExceptions {
         if (this.companiesRep.findByEmailAndPassword(company.getEmail(), company.getPassword()).isPresent()) {
-            System.out.println("company is already in the data base");
-            } else {
+            //throw new CouponsExceptions("company is already in the database");
+            System.out.println(company.getName() + " " + company.getId() + " is already in the database");
+        } else {
             companiesRep.save(company);
             System.out.println("company saved");
         }
     }
 
-    public void updateCompany(Company company){
-
+    public void updateCompany(Company company) { //v
+        if (companiesRep.findById(company.getId()).isPresent()) {
+            companiesRep.save(company);
+            System.out.println("company updated");
+        } else {
+            System.out.println("failed to update");
+        }
     }
 
-    public void deleteCompany(int companyId){}
 
-    public List<Company> getAllCompanies(){
+    public List<Company> getAllCompanies() { //v
         return companiesRep.findAll();
     }
-    //correct?
-    public Optional<Company> getOneCompany(int companyId) {
-        return companiesRep.findById(companyId);
-    }
-    public void addCustomer(Customer customer) {
+
+    public void addCustomer(Customer customer) { //v
+        if (customerRep.existsById(customer.getId())) {
+            System.out.println("customer " +customer.getFirstName() +" already exist");
+            return;
+        }
         customerRep.save(customer);
-        System.out.println("customer" + customer.getFirstName() +" saved");
+        System.out.println("customer" + customer.getFirstName() + " saved");
     }
 
-    public void updateCustomer(Customer customer) {}
-
-    public void deleteCustomer(int customerId) {
-        customerRep.deleteById(customerId);
+    public void updateCustomer(Customer customer) throws CouponsExceptions { //v
+        if (customerRep.existsById(customer.getId())) {
+            customerRep.save(customer);
+            System.out.println(customer.getFirstName() + " updated");
+        } else throw new CouponsExceptions("could not be updated");
     }
 
-    public List<Customer> getAllCustomers() {
+
+    public void deleteCompany(int companyId) { //v
+        if (companiesRep.existsById(companyId)) {
+            companiesRep.deleteById(companyId);
+            System.out.println("company " + companyId + " deleted");
+        } else {
+            System.out.println(" could not not find company - cannot delete");
+        }
+    }
+
+    // TODO: 20/02/2023 problem with id numbers, mybe because customerVScoupons
+    public void deleteCustomer(int customerId) { //vx
+        if (companiesRep.existsById(customerId)) {
+            customerRep.deleteById(customerId);
+            System.out.println("customer " +customerId + " deleted");
+        } else {
+            System.out.println("did not find customer");
+
+        }
+    }
+
+    public List<Customer> getAllCustomers() {  //v
         return customerRep.findAll();
     }
 
-    public Customer getOneCustomer(int customerId) {
-        return customerRep.getReferenceById(customerId);
+    //correct?
+    public Optional<Company> getOneCompany(int companyId) { //v
+        if (companiesRep.existsById(companyId)) {
+            return companiesRep.findById(companyId);
+        } else {
+            System.out.println("could not find company " + companyId);
+            return null;
+        }
     }
+
+    public Optional<Customer> getOneCustomer(int customerId) { //v
+        if (companiesRep.existsById(customerId)) {
+            return customerRep.findById(customerId);
+        } else {
+            System.out.println("could not find customer " + customerId);
+            return null;
+        }
+    }
+    //-----------------
 }

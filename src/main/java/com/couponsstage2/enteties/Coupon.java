@@ -1,5 +1,6 @@
 package com.couponsstage2.enteties;
 
+import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,14 +21,21 @@ public class Coupon {
 
     @Enumerated(EnumType.ORDINAL)
     private Category category;
+
+    @NotNull
     private String title;
+
+    @NotNull
     private String description;
 
+    @NotNull
     @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDate startDate = LocalDate.of(2022,1,1);
 
+    @NotNull
     @Column(nullable = false)
-    private LocalDate endDate;
+    private LocalDate endDate = LocalDate.of(2035,1,1);
+
     private int amount;
     private double price;
     private String image;
@@ -46,6 +54,5 @@ public class Coupon {
     @JoinColumn(name = "companyId")
     @ToString.Exclude
     private Company company;
-
 
 }

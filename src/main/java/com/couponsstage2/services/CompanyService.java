@@ -33,14 +33,14 @@ public class CompanyService extends ClientService {
         }
     }
 
-    //
+    // TODO: 20/02/2023 expire dates & exceptions
     public void addCoupon(Coupon coupon) {
-        Company company = companiesRep.findById(coupon.getCompany().getId()).orElseThrow();
-        if (coupon.getStartDate().isAfter(LocalDate.now()) && coupon.getEndDate().isBefore(LocalDate.now())) {
-            company.addCoupon(coupon);
-            System.out.println("coupon " + coupon.getDescription()+ " was added to company " + coupon.getCompany());
-        }
+        Company company = this.companiesRep.findById(coupon.getCompany().getId()).orElseThrow();
+//        if (coupon.getStartDate().isAfter(LocalDate.now()) && coupon.getEndDate().isBefore(LocalDate.now())) {
+        company.addCoupon(coupon);
+        System.out.println("coupon " + coupon.getDescription() + " was added to company " + coupon.getCompany());
     }
+
 }
 
 //
