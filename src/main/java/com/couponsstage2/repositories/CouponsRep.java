@@ -12,4 +12,9 @@ import java.util.Optional;
 @Repository
 public interface CouponsRep extends JpaRepository<Coupon,Integer> {
 
+    List<Coupon> findByCompanyId(int companyId);
+
+    List<Coupon> findByCustomersIdAndPriceLessThanEqual(int customerId,double price);
+
+    List<Coupon> findByCustomersId(int customerId);
 }

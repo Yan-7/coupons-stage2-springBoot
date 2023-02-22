@@ -29,7 +29,7 @@ public class Company {
     @OneToMany(mappedBy = "company",cascade =CascadeType.ALL )
     private List<Coupon> coupons;
 
-    public void addCoupon(Coupon coupon) {
+    public void addCouponC(Coupon coupon) {
         if (this.coupons == null) {
             this.coupons = new ArrayList<>();
         }
