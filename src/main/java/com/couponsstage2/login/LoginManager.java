@@ -29,12 +29,13 @@ public class LoginManager {
         switch (clientType) {
             case Admin: {
                 if ("admin@admin.com".equals(email) && "admin".equals(password)) {
+
                     return adminService;
                 }
                 break;
             }
             case Company: {
-                if (companiesRep.findByEmailAndPassword(email, password).orElse(null) != null) {
+                if (companiesRep.findByEmailAndPassword(email, password).isPresent()) {
                     return companyService;
                 }
                 break;

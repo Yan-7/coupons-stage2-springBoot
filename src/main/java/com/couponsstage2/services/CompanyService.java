@@ -3,10 +3,13 @@ package com.couponsstage2.services;
 import com.couponsstage2.enteties.Category;
 import com.couponsstage2.enteties.Company;
 import com.couponsstage2.enteties.Coupon;
+import com.couponsstage2.enteties.Customer;
 import com.couponsstage2.exceptions.CouponsExceptions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,37 +21,38 @@ public class CompanyService extends ClientService {
 
     private int companyId;
 
-    @Override
-    public boolean login(String email, String password) {
-        Optional<Company> optionalCompany = this.companiesRep.findByEmailAndPassword(email, password);
-        if (optionalCompany.isPresent()) {
-            System.out.println("company " + optionalCompany.get().getName() + "is logged in");
-            Company company = optionalCompany.get();
-            this.companyId = company.getId();
-            return true;
-        } else {
-            try {
-                throw new CouponsExceptions("login for " + optionalCompany.get().getName() + "cannot login");
-            } catch (CouponsExceptions e) {
-                throw new RuntimeException(e);
-            }
+    @Autowired
+    private EntityManager entityManager;
 
+    @Override
+    public boolean login(String email, String password) { //v
+        Optional<Company> companyOpt = companiesRep.findByEmailAndPassword(email, password);
+        if (companyOpt.isPresent()) {
+            Company company = companyOpt.get();
+            this.companyId = company.getId();
+            System.out.println("Login successful - true");
+            return true;
+        }
+        System.out.println("could not login - false");
+        return false;
+    }
+
+
+
+
+    public void addCouponToCompany(Coupon coupon) { //v
+        Optional<Company> optionalCompany = this.companiesRep.findById(coupon.getCompany().getId());
+        if (optionalCompany.isPresent()) {
+            Company company = optionalCompany.get();
+            //        if (coupon.getStartDate().isAfter(LocalDate.now()) && coupon.getEndDate().isBefore(LocalDate.now())) {
+            Coupon mergedCoupon = entityManager.merge(coupon); // Reattaches the Coupon object to the current session
+            company.addCouponClass(mergedCoupon);
+            System.out.println("Coupon " + mergedCoupon.getId() + " was added to company " + company.getId());
+        } else {
+            System.out.println("Could not add coupon to company");
         }
     }
 
-    // TODO: 20/02/2023 not working
-    public void addCoupon(Coupon coupon) {
-//        Optional<Company> optionalCompany = this.companiesRep.findById(coupon.getCompany().getId());
-//        if (optionalCompany.isPresent()) {
-////        if (coupon.getStartDate().isAfter(LocalDate.now()) && coupon.getEndDate().isBefore(LocalDate.now())) {
-//            Company company = optionalCompany.get();
-//            company.addCouponC(coupon);
-//            System.out.println("coupon " + coupon.getDescription() + " was added to company " + coupon.getCompany());
-//        } else {
-//            System.out.println("could not add coupon to company");
-//        }
-//
-    }
 
     // TODO: 21/02/2023 more testing
     public void updateCoupon(Coupon coupon) { //vx
@@ -83,6 +87,7 @@ public class CompanyService extends ClientService {
     }
 
     public Company getCompanyDetails() {
+        System.out.println("company id: " +companyId);
         Optional<Company> optional = companiesRep.findById(companyId);
         if (optional.isPresent()) {
             Company company = optional.get();

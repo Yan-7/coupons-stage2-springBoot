@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+//@Component
 public class TestsCustomerService implements CommandLineRunner {
 
     @Autowired

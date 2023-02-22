@@ -13,7 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "coupons")
+// TODO: 22/02/2023 hide password after testing is finished 
+//@ToString(exclude = "password")
 public class Company {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +33,7 @@ public class Company {
     @OneToMany(mappedBy = "company",cascade =CascadeType.ALL )
     private List<Coupon> coupons;
 
-    public void addCouponC(Coupon coupon) {
+    public void addCouponClass(Coupon coupon) {
         if (this.coupons == null) {
             this.coupons = new ArrayList<>();
         }
