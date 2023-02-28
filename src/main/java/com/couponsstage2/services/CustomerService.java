@@ -24,10 +24,10 @@ public class CustomerService extends ClientService {
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
             this.customerId = customer.getId();
-            System.out.println("Login successful - true");
+            System.out.println("Login successful");
             return true;
         }
-        System.out.println("could not login - false");
+        System.out.println("failed not login");
         return false;
     }
 
@@ -36,13 +36,13 @@ public class CustomerService extends ClientService {
         Optional<Customer> customerOpt = customerRep.findById(customerId);
         if (customerOpt.isPresent()) {
             Customer customer1 = customerOpt.get();
-            System.out.println("custemer for adding coupon: " + customer1);
+            System.out.println("customer for adding coupon: " + customer1);
             Optional<Coupon> optionalCoupon = couponsRep.findById(coupon.getId());
             System.out.println("the coupon: " + optionalCoupon);
             if (optionalCoupon.isPresent()) {
                 Coupon coupon1 = optionalCoupon.get();
                 customer1.attachCouponToCustomer(coupon1);
-                coupon1.setAmount(coupon1.getAmount()-1);
+                coupon1.setAmount(coupon1.getAmount() - 1);
                 return;
             }
         }
@@ -64,7 +64,7 @@ public class CustomerService extends ClientService {
             List<Coupon> customerCoupons = customer.getCoupons();
             System.out.println(customerCoupons);
             // load the coupons eagerly before the session is closed
-            System.out.println("size: " +customerCoupons.size());
+            System.out.println("size: " + customerCoupons.size());
 
             List<Coupon> result = new ArrayList<>();
             for (Coupon coupon : customerCoupons) {
@@ -80,14 +80,25 @@ public class CustomerService extends ClientService {
         return null;
     }
 
-    public ArrayList<Coupon> getCustomerCouponsByMaxPrice(double maxPrice) { //v
-        List<Coupon> coupons = couponsRep.findByCustomersIdAndPriceLessThanEqual(customerId, maxPrice);
-        System.out.println("number of coupons by max price:");
-        System.out.println(coupons.size());
-        System.out.println("coupons by max price: " +maxPrice);
-        System.out.println(coupons);
-        return (ArrayList<Coupon>) coupons;
+    // TODO: 28/02/2023 fix
+    public List<Coupon> getCustomerCouponsByMaxPrice(double maxPrice) { //v
+        List<Coupon> customerCoupons = couponsRep.findByCustomersId(customerId);
+
+        if (!customerCoupons.isEmpty()) {
+            List<Coupon> customerCoupons2 = new ArrayList<>();
+            for (Coupon c : customerCoupons) {
+                if (c.getPrice() <= maxPrice) {
+                    customerCoupons2.add(c);
+                }
+            }
+            System.out.println("customer coupons by price: " + maxPrice);
+            System.out.println(customerCoupons2);
+            return customerCoupons2;
+        }
+        System.out.println("could not find coupons by max price "+ maxPrice);
+        return null;
     }
+
 
     public Optional<Customer> getCustomerDetails() { //v
         System.out.println("customer details:");

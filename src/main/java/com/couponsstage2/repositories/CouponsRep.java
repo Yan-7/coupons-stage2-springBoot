@@ -1,5 +1,6 @@
 package com.couponsstage2.repositories;
 
+import com.couponsstage2.enteties.Category;
 import com.couponsstage2.enteties.Coupon;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
@@ -14,7 +15,11 @@ public interface CouponsRep extends JpaRepository<Coupon,Integer> {
 
     List<Coupon> findByCompanyId(int companyId);
 
-    List<Coupon> findByCustomersIdAndPriceLessThanEqual(int customerId,double price);
+    List<Coupon> findByCategoryAndCompanyId(Category category,int companyId);
+
+    List<Coupon> findByPriceAndCompanyId(double maxPrice,int companyId);
+
+
 
     List<Coupon> findByCustomersId(int customerId);
 }

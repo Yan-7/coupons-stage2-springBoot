@@ -24,21 +24,20 @@ public class CompanyService extends ClientService {
     @Autowired
     private EntityManager entityManager;
 
+
     @Override
     public boolean login(String email, String password) { //v
         Optional<Company> companyOpt = companiesRep.findByEmailAndPassword(email, password);
         if (companyOpt.isPresent()) {
             Company company = companyOpt.get();
             this.companyId = company.getId();
-            System.out.println("Login successful - true");
+            System.out.println("Login successful");
             return true;
         }
-        System.out.println("could not login - false");
+        // TODO: 28/02/2023 when email is incorrect this message does not apear:
+        System.out.println("could not login");
         return false;
     }
-
-
-
 
     public void addCouponToCompany(Coupon coupon) { //v
         Optional<Company> optionalCompany = this.companiesRep.findById(coupon.getCompany().getId());
@@ -47,6 +46,7 @@ public class CompanyService extends ClientService {
             //        if (coupon.getStartDate().isAfter(LocalDate.now()) && coupon.getEndDate().isBefore(LocalDate.now())) {
             Coupon mergedCoupon = entityManager.merge(coupon); // Reattaches the Coupon object to the current session
             company.addCouponClass(mergedCoupon);
+
             System.out.println("Coupon " + mergedCoupon.getId() + " was added to company " + company.getId());
         } else {
             System.out.println("Could not add coupon to company");
@@ -54,10 +54,13 @@ public class CompanyService extends ClientService {
     }
 
 
-    // TODO: 21/02/2023 more testing
-    public void updateCoupon(Coupon coupon) { //vx
-        couponsRep.save(coupon);
-        System.out.println("coupon saved to repository");
+    public void updateCoupon(Coupon coupon) { //v
+        if (couponsRep.existsById(coupon.getId())) {
+            this.couponsRep.save(coupon);
+            System.out.println("coupon " + coupon.getId() + " updated to repository");
+        } else {
+            System.out.println("could not update coupon");
+        }
     }
 
     public void deleteCoupon(int couponId) { //v
@@ -67,27 +70,53 @@ public class CompanyService extends ClientService {
         }
     }
 
-    // TODO: 21/02/2023 could not find
-    public List<Coupon> getCompanyCoupons() {
-
-
-        if (couponsRep.existsById(companyId)) {
-            return couponsRep.findByCompanyId(companyId);
+    public List<Coupon> getCompanyCoupons() { //v
+        List<Coupon> companyCoupons = couponsRep.findByCompanyId(companyId);
+        if (!companyCoupons.isEmpty()) {
+            System.out.println("list of all company coupons:");
+            System.out.println(companyCoupons);
+            return companyCoupons;
+        } else {
+            System.out.println("could not find coupons");
+            return null;
         }
-        System.out.println("could not find coupons");
+    }
+
+    public List<Coupon> getCompanyCouponsByCategory(Category category) { //v
+        List<Coupon> companyCoupons = getCompanyCoupons();
+        List<Coupon> companyCoupons2 = new ArrayList<>();
+        if (!companyCoupons.isEmpty()) {
+            System.out.println("coupons by category: " + category);
+            System.out.println(companyCoupons);
+            return companyCoupons;
+        }
+
+        System.out.println("could not find coupons by category " + category);
+        return null;
+
+    }
+
+    public List<Coupon> getCompanyCouponsByMaxPrice(double maxPrice) { //v
+        List<Coupon> companyCoupons = getCompanyCoupons();
+        if (!companyCoupons.isEmpty()) {
+            List<Coupon> companyCoupons2 = new ArrayList<>();
+            for (Coupon c : companyCoupons) {
+                if (c.getPrice() <= maxPrice) {
+                    companyCoupons2.add(c);
+                }
+            }
+
+            if (!companyCoupons2.isEmpty()) {
+                System.out.println("list of coupons by max price " + maxPrice);
+                System.out.println(companyCoupons2);
+                return companyCoupons2;
+            }
+        }
+        System.out.println("could not find coupons by company id: " + companyId + "and max price: " + maxPrice);
         return null;
     }
 
-    public ArrayList<Coupon> getCompanyCouponsByCategory(Category category) {
-        return null;
-    }
-
-    public ArrayList<Coupon> getCompanyCouponsByMaxPrice(double maxPrice) {
-        return null;
-    }
-
-    public Company getCompanyDetails() {
-        System.out.println("company id: " +companyId);
+    public Company getCompanyDetails() { //v
         Optional<Company> optional = companiesRep.findById(companyId);
         if (optional.isPresent()) {
             Company company = optional.get();

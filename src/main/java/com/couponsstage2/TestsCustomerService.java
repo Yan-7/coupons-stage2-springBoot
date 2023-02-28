@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Component
+@Component
 public class TestsCustomerService implements CommandLineRunner {
 
     @Autowired
@@ -25,7 +25,6 @@ public class TestsCustomerService implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        CustomerService customerService = (CustomerService) loginManager.login("bob@", "1234", ClientType.Customer);
 
         List<Customer> customers = new ArrayList<>();
         List<Coupon> coupons = new ArrayList<>();
@@ -37,17 +36,17 @@ public class TestsCustomerService implements CommandLineRunner {
         Customer customer3 = new Customer(3, "Bob", "Sponge", "bob@", "1234", coupons);
 
 
+        CustomerService customerService = (CustomerService) loginManager.login("bob@", "1234", ClientType.Customer);
         customerService.login(customer3.getEmail(), customer3.getPassword());
+        System.out.println("----------------------------->");
         System.out.println("customer details:");
         System.out.println(customerService.getCustomerDetails());
-        System.out.println("-----------------------------");
+        System.out.println("<-------------------->");
 
-        System.out.println("--------------------");
+        customerService.purchaseCoupon(coupon1);
+        customerService.getCustomerCouponsByCategory(Category.FOOD);
+        customerService.getCustomerCouponsByMaxPrice(50);
         System.out.println("-----------");
     }
 }
 
-//            customerService.getCustomerCouponsByMaxPrice(1); v
-//        customerService.getCustomerCouponsByCategory(Category.FOOD); v
-//        customerService.purchaseCoupon(coupon7); v
-//        System.out.println(customerService.getCustomerDetails()); v

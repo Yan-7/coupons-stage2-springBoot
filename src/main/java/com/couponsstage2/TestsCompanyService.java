@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Component
+//@Component
 public class TestsCompanyService implements CommandLineRunner {
 
     @Autowired
@@ -28,6 +28,7 @@ public class TestsCompanyService implements CommandLineRunner {
         List<Customer> customers = new ArrayList<>();
         List<Coupon> coupons = new ArrayList<>();
         Company comp1 = new Company(15, "MoshePhone", "Moshe@", "1234", coupons);
+        Company comp1Update = new Company(15, "MoshePhoneU", "Moshe@U", "1234", coupons);
         Coupon coupon1 = new Coupon(3, Category.ELECTRICITY, "chip", "bla bla", LocalDate.of(2000, 1, 1), LocalDate.of(2030, 1, 1), 100, 99, "image", customers, comp1);
         Coupon coupon10 = new Coupon(10, Category.FOOD, "burger", "bla bla", LocalDate.of(2000, 1, 1), LocalDate.of(2030, 1, 1), 100, 99, "image", null, comp1);
         coupons.add(coupon1);
@@ -35,18 +36,20 @@ public class TestsCompanyService implements CommandLineRunner {
 
         CompanyService companyService = (CompanyService) loginManager.login(comp1.getEmail(),comp1.getPassword(), ClientType.Company);
         companyService.login(comp1.getEmail(),comp1.getPassword());
-        System.out.println("-----------------");
+        System.out.println("----------------->");
         companyService.getCompanyDetails();
-        System.out.println("-------------");
+        System.out.println("<------------->");
+
+        companyService.addCouponToCompany(coupon10);
+        companyService.updateCoupon(coupon10);
+        companyService.deleteCoupon(10);
+        companyService.getCompanyCoupons();
+        companyService.getCompanyCouponsByCategory(Category.FOOD);
+        companyService.getCompanyCouponsByMaxPrice(70);
 
 
+        System.out.println("<--------------");
 
-        System.out.println("--------------");
 
-
-//        companyService.addCouponToCompany(coupon10); v
-//        companyService.getCompanyCoupons();
-//        companyService.deleteCoupon(4);
-//        companyService.updateCoupon(coupon1);
     }
 }

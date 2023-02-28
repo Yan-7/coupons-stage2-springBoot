@@ -29,7 +29,6 @@ public class LoginManager {
         switch (clientType) {
             case Admin: {
                 if ("admin@admin.com".equals(email) && "admin".equals(password)) {
-
                     return adminService;
                 }
                 break;

@@ -3,6 +3,7 @@ package com.couponsstage2.services;
 import com.couponsstage2.enteties.Company;
 import com.couponsstage2.enteties.Customer;
 import com.couponsstage2.exceptions.CouponsExceptions;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +17,11 @@ public class AdminService extends ClientService {
     private final static String emailA = "admin@admin.com";
     private final static String passwordA = "admin";
 
+    // TODO: 28/02/2023 is the login method needed, why do i need boolean? 
     @Override
     public boolean login(String email, String password) {
         if (email == emailA && password == passwordA) {
-            System.out.println("user admin returned true");
+            System.out.println("user admin logged in");
             return true;
         } else {
             System.out.println("email or password are not correct");
@@ -28,23 +30,25 @@ public class AdminService extends ClientService {
         }
     }
 
-    // TODO: 19/02/2023 add exceptions 
+    // TODO: 28/02/2023 those damm exceptions are crashing the app. 
+
     public void addCompany(Company company) throws CouponsExceptions {
         if (this.companiesRep.findByEmailAndPassword(company.getEmail(), company.getPassword()).isPresent()) {
-            //throw new CouponsExceptions("company is already in the database");
-            System.out.println(company.getName() + " " + company.getId() + " is already in the database");
+            throw new CouponsExceptions("company is already in the database");
+//            System.out.println(company.getName() + " ,id: " + company.getId() + " is already in the database, cannot add again");
         } else {
             companiesRep.save(company);
             System.out.println("company saved");
         }
     }
 
-    public void updateCompany(Company company) { //v
+    public void updateCompany(Company company) throws CouponsExceptions { //v
         if (companiesRep.findById(company.getId()).isPresent()) {
             companiesRep.save(company);
             System.out.println("company updated");
         } else {
-            System.out.println("failed to update");
+            throw new CouponsExceptions("failed to update");
+//            System.out.println("failed to update");
         }
     }
 
@@ -53,10 +57,11 @@ public class AdminService extends ClientService {
         return companiesRep.findAll();
     }
 
-    public void addCustomer(Customer customer) { //v
+    public void addCustomer(Customer customer) throws CouponsExceptions { //v
         if (customerRep.existsById(customer.getId())) {
-            System.out.println("customer " +customer.getFirstName() +" already exist");
-            return;
+            throw new CouponsExceptions("customer " +customer.getFirstName() +" already exist");
+//            System.out.println("customer " +customer.getFirstName() +" already exist");
+//            return;
         }
         customerRep.save(customer);
         System.out.println("customer" + customer.getFirstName() + " saved");
@@ -70,23 +75,23 @@ public class AdminService extends ClientService {
     }
 
 
-    public void deleteCompany(int companyId) { //v
+    public void deleteCompany(int companyId) throws CouponsExceptions { //v
         if (companiesRep.existsById(companyId)) {
             companiesRep.deleteById(companyId);
             System.out.println("company " + companyId + " deleted");
         } else {
-            System.out.println(" could not not find company - cannot delete");
+            throw new CouponsExceptions(" could not not find company - cannot delete");
+//            System.out.println(" could not not find company - cannot delete");
         }
     }
 
-    // TODO: 20/02/2023 problem with id numbers, mybe because customerVScoupons
-    public void deleteCustomer(int customerId) { //vx
+    public void deleteCustomer(int customerId) throws CouponsExceptions { //vx
         if (companiesRep.existsById(customerId)) {
             customerRep.deleteById(customerId);
             System.out.println("customer " +customerId + " deleted");
         } else {
-            System.out.println("did not find customer");
-
+//            System.out.println("did not find customer");
+            throw new CouponsExceptions("did not find customer");
         }
     }
 
@@ -95,21 +100,23 @@ public class AdminService extends ClientService {
     }
 
     //correct?
-    public Optional<Company> getOneCompany(int companyId) { //v
+    public Optional<Company> getOneCompany(int companyId) throws CouponsExceptions { //v
         if (companiesRep.existsById(companyId)) {
             return companiesRep.findById(companyId);
         } else {
-            System.out.println("could not find company " + companyId);
-            return null;
+            throw new CouponsExceptions("could not find company " + companyId);
+//            System.out.println("could not find company " + companyId);
+//            return null;
         }
     }
 
-    public Optional<Customer> getOneCustomer(int customerId) { //v
+    public Optional<Customer> getOneCustomer(int customerId) throws CouponsExceptions { //v
         if (companiesRep.existsById(customerId)) {
             return customerRep.findById(customerId);
         } else {
-            System.out.println("could not find customer " + customerId);
-            return null;
+            throw new CouponsExceptions("could not find customer " + customerId);
+//            System.out.println("could not find customer " + customerId);
+//            return null;
         }
     }
     //-----------------
