@@ -3,6 +3,7 @@ package com.couponsstage2;
 import com.couponsstage2.enteties.Company;
 import com.couponsstage2.enteties.Coupon;
 import com.couponsstage2.enteties.Customer;
+import com.couponsstage2.exceptions.CouponException;
 import com.couponsstage2.login.ClientType;
 import com.couponsstage2.login.LoginManager;
 import com.couponsstage2.services.AdminService;
@@ -13,14 +14,14 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Component
+@Component
 public class TestsAdminService implements CommandLineRunner {
 
     @Autowired
     private LoginManager loginManager;
 
-    @Autowired
-    private AdminService adminService;
+//    @Autowired
+//    private AdminService adminService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -29,9 +30,9 @@ public class TestsAdminService implements CommandLineRunner {
         Coupon coupon1 = new Coupon();
         List<Coupon> coupons = new ArrayList<>();
         coupons.add(coupon1);
-        Company comp1 = new Company(15, "MoshePhone", "Moshe@", "admin", coupons);
-        Company comp2 = new Company(2, "MoshePhone2", "Moshe2@", "admin", coupons);
-        Customer customer1 = new Customer(1, "Bob", "Sponge", "bob@", "1234", coupons);
+        Company comp1 = new Company(0, "MoshePhone", "Moshe@", "admin", coupons);
+        Company comp2 = new Company(0, "MoshePhone2", "Moshe2@", "admin", coupons);
+        Customer customer1 = new Customer(0, "Bob", "Sponge", "bob@", "1234", coupons);
 
 
         AdminService admin = (AdminService) loginManager.login("admin@admin.com", "admin", ClientType.Admin);
@@ -39,9 +40,15 @@ public class TestsAdminService implements CommandLineRunner {
 // TODO: 28/02/2023 the exceptions are crashing the software
         System.out.println("---------------------->");
 
-//        admin.addCompany(comp1);
-        System.out.println(admin.getOneCompany(comp1.getId()));
+        try {
+            admin.addCompany(comp1);
+        } catch (CouponException exceptions) {
+            System.out.println("error");
+            System.out.println(exceptions.getMessage());
+        }
 
+
+        System.out.println(admin.getOneCompany(comp1.getId()));
         System.out.println("--------------<");
         //    admin.addCustomer(customer1);
 

@@ -2,8 +2,7 @@ package com.couponsstage2.services;
 
 import com.couponsstage2.enteties.Company;
 import com.couponsstage2.enteties.Customer;
-import com.couponsstage2.exceptions.CouponsExceptions;
-import lombok.SneakyThrows;
+import com.couponsstage2.exceptions.CouponException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,22 +31,24 @@ public class AdminService extends ClientService {
 
     // TODO: 28/02/2023 those damm exceptions are crashing the app. 
 
-    public void addCompany(Company company) throws CouponsExceptions {
+    public void addCompany(Company company) throws CouponException {
+        company.setId(0);
         if (this.companiesRep.findByEmailAndPassword(company.getEmail(), company.getPassword()).isPresent()) {
-            throw new CouponsExceptions("company is already in the database");
+            throw new CouponException("company is already in the database");
 //            System.out.println(company.getName() + " ,id: " + company.getId() + " is already in the database, cannot add again");
+
         } else {
             companiesRep.save(company);
             System.out.println("company saved");
         }
     }
 
-    public void updateCompany(Company company) throws CouponsExceptions { //v
+    public void updateCompany(Company company) throws CouponException { //v
         if (companiesRep.findById(company.getId()).isPresent()) {
             companiesRep.save(company);
             System.out.println("company updated");
         } else {
-            throw new CouponsExceptions("failed to update");
+            throw new CouponException("failed to update");
 //            System.out.println("failed to update");
         }
     }
@@ -57,9 +58,9 @@ public class AdminService extends ClientService {
         return companiesRep.findAll();
     }
 
-    public void addCustomer(Customer customer) throws CouponsExceptions { //v
+    public void addCustomer(Customer customer) throws CouponException { //v
         if (customerRep.existsById(customer.getId())) {
-            throw new CouponsExceptions("customer " +customer.getFirstName() +" already exist");
+            throw new CouponException("customer " +customer.getFirstName() +" already exist");
 //            System.out.println("customer " +customer.getFirstName() +" already exist");
 //            return;
         }
@@ -67,31 +68,31 @@ public class AdminService extends ClientService {
         System.out.println("customer" + customer.getFirstName() + " saved");
     }
 
-    public void updateCustomer(Customer customer) throws CouponsExceptions { //v
+    public void updateCustomer(Customer customer) throws CouponException { //v
         if (customerRep.existsById(customer.getId())) {
             customerRep.save(customer);
             System.out.println(customer.getFirstName() + " updated");
-        } else throw new CouponsExceptions("could not be updated");
+        } else throw new CouponException("could not be updated");
     }
 
 
-    public void deleteCompany(int companyId) throws CouponsExceptions { //v
+    public void deleteCompany(int companyId) throws CouponException { //v
         if (companiesRep.existsById(companyId)) {
             companiesRep.deleteById(companyId);
             System.out.println("company " + companyId + " deleted");
         } else {
-            throw new CouponsExceptions(" could not not find company - cannot delete");
+            throw new CouponException(" could not not find company - cannot delete");
 //            System.out.println(" could not not find company - cannot delete");
         }
     }
 
-    public void deleteCustomer(int customerId) throws CouponsExceptions { //vx
+    public void deleteCustomer(int customerId) throws CouponException { //vx
         if (companiesRep.existsById(customerId)) {
             customerRep.deleteById(customerId);
             System.out.println("customer " +customerId + " deleted");
         } else {
 //            System.out.println("did not find customer");
-            throw new CouponsExceptions("did not find customer");
+            throw new CouponException("did not find customer");
         }
     }
 
@@ -100,21 +101,21 @@ public class AdminService extends ClientService {
     }
 
     //correct?
-    public Optional<Company> getOneCompany(int companyId) throws CouponsExceptions { //v
+    public Optional<Company> getOneCompany(int companyId) throws CouponException { //v
         if (companiesRep.existsById(companyId)) {
             return companiesRep.findById(companyId);
         } else {
-            throw new CouponsExceptions("could not find company " + companyId);
+            throw new CouponException("could not find company " + companyId);
 //            System.out.println("could not find company " + companyId);
 //            return null;
         }
     }
 
-    public Optional<Customer> getOneCustomer(int customerId) throws CouponsExceptions { //v
+    public Optional<Customer> getOneCustomer(int customerId) throws CouponException { //v
         if (companiesRep.existsById(customerId)) {
             return customerRep.findById(customerId);
         } else {
-            throw new CouponsExceptions("could not find customer " + customerId);
+            throw new CouponException("could not find customer " + customerId);
 //            System.out.println("could not find customer " + customerId);
 //            return null;
         }
