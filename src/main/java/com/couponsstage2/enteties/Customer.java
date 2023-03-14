@@ -10,8 +10,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "coupons")
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = "coupons")
 public class Customer {
 
     @Id
@@ -24,7 +24,6 @@ public class Customer {
     private String email;
     private String password;
 
-    // TODO: 14/02/2023   Error executing DDL "alter table customer_vs_coupon drop foreign key FKikxo4a104ty3ydilh4m422ca2" via JDBC Statement
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.PERSIST})
     @JoinTable(
                 name = "customer_vs_coupon",

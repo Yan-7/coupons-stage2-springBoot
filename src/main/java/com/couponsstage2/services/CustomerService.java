@@ -24,7 +24,8 @@ public class CustomerService extends ClientService {
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
             this.customerId = customer.getId();
-            System.out.println("Login successful");
+            System.out.println("Login successful, customer " + customer.getFirstName() + " is logged in");
+
             return true;
         }
         System.out.println("failed not login");
@@ -36,6 +37,7 @@ public class CustomerService extends ClientService {
         Optional<Customer> customerOpt = customerRep.findById(customerId);
         if (customerOpt.isPresent()) {
             Customer customer1 = customerOpt.get();
+            System.out.println();
             System.out.println("customer for adding coupon: " + customer1);
             Optional<Coupon> optionalCoupon = couponsRep.findById(coupon.getId());
             System.out.println("the coupon: " + optionalCoupon);
@@ -60,7 +62,7 @@ public class CustomerService extends ClientService {
         Optional<Customer> customerOpt = customerRep.findById(customerId);
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
-            System.out.println("customer total coupons:");
+            System.out.println("customer coupons by category: " + category);
             List<Coupon> customerCoupons = customer.getCoupons();
             System.out.println(customerCoupons);
             // load the coupons eagerly before the session is closed
@@ -79,8 +81,6 @@ public class CustomerService extends ClientService {
         System.out.println("could not find coupon");
         return null;
     }
-
-    // TODO: 28/02/2023 fix
     public List<Coupon> getCustomerCouponsByMaxPrice(double maxPrice) { //v
         List<Coupon> customerCoupons = couponsRep.findByCustomersId(customerId);
 
@@ -102,7 +102,6 @@ public class CustomerService extends ClientService {
 
     public Optional<Customer> getCustomerDetails() { //v
         System.out.println("customer details:");
-        System.out.println(customerRep.findById(customerId));
         return customerRep.findById(customerId);
     }
 

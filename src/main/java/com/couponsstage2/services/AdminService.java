@@ -16,7 +16,6 @@ public class AdminService extends ClientService {
     private final static String emailA = "admin@admin.com";
     private final static String passwordA = "admin";
 
-    // TODO: 28/02/2023 is the login method needed, why do i need boolean? 
     @Override
     public boolean login(String email, String password) {
         if (email == emailA && password == passwordA) {
@@ -29,7 +28,6 @@ public class AdminService extends ClientService {
         }
     }
 
-    // TODO: 28/02/2023 those damm exceptions are crashing the app. 
 
     public void addCompany(Company company) throws CouponException {
         company.setId(0);
@@ -39,7 +37,7 @@ public class AdminService extends ClientService {
 
         } else {
             companiesRep.save(company);
-            System.out.println("company saved");
+            System.out.println("company " +company.getId()+" saved");
         }
     }
 

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,6 @@ public interface CouponsRep extends JpaRepository<Coupon,Integer> {
     List<Coupon> findByCategoryAndCompanyId(Category category,int companyId);
 
     List<Coupon> findByPriceAndCompanyId(double maxPrice,int companyId);
-
-
 
     List<Coupon> findByCustomersId(int customerId);
 }

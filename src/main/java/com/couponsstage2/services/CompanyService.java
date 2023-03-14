@@ -28,7 +28,7 @@ public class CompanyService extends ClientService {
         if (companyOpt.isPresent()) {
             Company company = companyOpt.get();
             this.companyId = company.getId();
-            System.out.println("Login successful");
+            System.out.println("company " + company.getName() + " Login successful");
             return true;
         }
         // TODO: 28/02/2023 when email is incorrect this message does not apear:
@@ -56,7 +56,7 @@ public class CompanyService extends ClientService {
             this.couponsRep.save(coupon);
             System.out.println("coupon " + coupon.getId() + " updated to repository");
         } else {
-            System.out.println("could not update coupon");
+            System.out.println("coupon not found, could not update coupon");
         }
     }
 
@@ -71,7 +71,6 @@ public class CompanyService extends ClientService {
         List<Coupon> companyCoupons = couponsRep.findByCompanyId(companyId);
         if (!companyCoupons.isEmpty()) {
             System.out.println("list of all company coupons:");
-            System.out.println(companyCoupons);
             return companyCoupons;
         } else {
             System.out.println("could not find coupons");
@@ -83,8 +82,7 @@ public class CompanyService extends ClientService {
         List<Coupon> companyCoupons = getCompanyCoupons();
         List<Coupon> companyCoupons2 = new ArrayList<>();
         if (!companyCoupons.isEmpty()) {
-            System.out.println("coupons by category: " + category);
-            System.out.println(companyCoupons);
+            System.out.println("company coupons by category: " + category);
             return companyCoupons;
         }
 
@@ -118,7 +116,6 @@ public class CompanyService extends ClientService {
         if (optional.isPresent()) {
             Company company = optional.get();
             System.out.println("company details: ");
-            System.out.println(company);
             return company;
         } else {
             System.out.println("could not find company");
